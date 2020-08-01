@@ -1,12 +1,13 @@
 Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)  
-Чтобы меньше создавать каталоги и файлы конфигурции вручную, такие, как том db_data для СУБД, Dockerfile, docker-compose.yml, .env, оформил их в репозиторий.  
-Клонировать репозиторий:  
+Рсположиться в каком-то каталоге, например, в projects.  
+Клонировать этот репозиторий:  
 `git clone https://github.com/itechnocrat/docker_laravel-app_skeleton.git laravel-app`  
-выполнить:
+Удалить базу данных Git:
 ```sh
 rm -rf laravel-app/.git
 ```
-Далее по пунктам основного мануала, но когда дойдет до создания каталога db_data, конфигов mysql, nginx, php, .env, то их делать уже будет не нужно, так как они придут из https://github.com/itechnocrat/docker_laravel-app_skeleton.git.  
+Из каталога не выходить.  
+Следующий шаг выполнить в этом же каталоге (projects), в котором выполнялось предыдущее клонирование, т.е. новая структура каталогов наложится уже на существующую.  
 ### Step 1 — Downloading Laravel and Installing Dependencies
 ```sh
 git clone https://github.com/laravel/laravel.git laravel-app && \
@@ -17,6 +18,7 @@ cd .. && \
 sudo chown -R $USER:$USER ./laravel-app
 
 ```
+Сейчас можно сразу перейти к пункту 8.1  
 ### Step 2 — Creating the Docker Compose File
 ```sh
 vi ./laravel-app/docker-compose.yml
@@ -243,6 +245,7 @@ DB_DATABASE=laravel
 DB_USERNAME=laraveluser
 DB_PASSWORD=laraveluser_password
 ```
+### Step 8.1 - Start laravel_app
 ```sh
 cd laravel-app
 docker-compose up -d
@@ -255,7 +258,7 @@ docker-compose exec app php artisan config:cache
 ```sh
 docker-compose exec db bash
 mysql -u root -pr00t
-# паоль r00t
+# пароль r00t
 ```
 ```sql
 show databases;
