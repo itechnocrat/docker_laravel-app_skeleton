@@ -1,7 +1,9 @@
 Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)  
 Расположиться в каком-то каталоге, например, в projects.  
 Клонировать этот репозиторий:  
-`git clone https://github.com/itechnocrat/docker_laravel-app_skeleton.git laravel-app`  
+```sh
+git clone https://github.com/itechnocrat/docker_laravel-app_skeleton.git laravel-app
+```
 Удалить базу данных Git:
 ```sh
 rm -rf laravel-app/.git
