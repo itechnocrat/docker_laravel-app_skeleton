@@ -1,6 +1,6 @@
 # Рабочий, пустой Laravel в Docker-контейнерах, с базой данных и PhpMyAdmin
-После запуска приложение доступно по localhost.  
-PhpMyAdmin дступен по адресу localhost:8080.  
+После запуска приложение доступно на localhost.  
+PhpMyAdmin дступен на localhost:8080.  
 Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)  
 ### Step 0 - Intro
 Расположиться в каком-то каталоге, например, в projects.  
