@@ -1,26 +1,21 @@
 Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)  
+### Step 0 - Intro
 Расположиться в каком-то каталоге, например, в projects.  
-Клонировать этот репозиторий:  
-```sh
-git clone https://github.com/itechnocrat/docker_laravel-app_skeleton.git laravel-app
-```
-Удалить базу данных Git:
-```sh
-rm -rf laravel-app/.git
-```
-Из каталога не выходить.  
-Следующий шаг выполнить в этом же каталоге (projects), в котором выполнялось предыдущее клонирование, т.е. новая структура каталогов наложится уже на существующую.  
 ### Step 1 — Downloading Laravel and Installing Dependencies
 ```sh
-git clone https://github.com/laravel/laravel.git laravel-app && \
-cd laravel-app && \
-rm -rf .git && \
-docker run --rm -v $(pwd):/app composer install && \
-cd .. && \
-sudo chown -R $USER:$USER ./laravel-app
-
+git clone https://github.com/laravel/laravel.git laravel-app
+cd laravel-app
+rm -rf .git
+docker run --rm -v $(pwd):/app composer install
+cd ..
 ```
-Сейчас можно сразу перейти к пункту 8.1  
+### Step 1.1 - Добавление конфигурационных файлов и тома для СУБД
+[Репозиторий](https://github.com/itechnocrat/docker_laravel-app_skeleton.git) нужно наложить поверх структуры каталогов, полученной на шаге 1.
+```sh
+rm -rf laravel-app/.git
+sudo chown -R $USER:$USER ./laravel-app
+```
+После этого можно сразу перейти к пункту 8.1  
 ### Step 2 — Creating the Docker Compose File
 ```sh
 vi ./laravel-app/docker-compose.yml
