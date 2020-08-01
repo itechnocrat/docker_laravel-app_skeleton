@@ -10,7 +10,7 @@ docker run --rm -v $(pwd):/app composer install
 cd ..
 ```
 ### Step 1.1 - Добавление конфигурационных файлов и тома для СУБД
-[Репозиторий](https://github.com/itechnocrat/docker_laravel-app_skeleton.git) нужно наложить поверх структуры каталогов, полученной на шаге 1.
+Этот [Репозиторий](https://github.com/itechnocrat/docker_laravel-app_skeleton.git) нужно наложить поверх структуры каталогов, полученной на шаге 1.
 ```sh
 rm -rf laravel-app/.git
 sudo chown -R $USER:$USER ./laravel-app
