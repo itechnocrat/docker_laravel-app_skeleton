@@ -12,10 +12,10 @@ cd ..
 ### Step 1.1 - Добавление конфигурационных файлов и тома для данных базы данных
 Этот репозитормй нужно загрузить, как [архив](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) и его СОДЕРЖИМОЕ скопировать в `laravel-app`, затем:
 ```sh
-rm -rf laravel-app/.git
+rm -rf ./laravel-app/.git
 sudo chown -R $USER:$USER ./laravel-app
 ```
-После этого можно сразу перейти к пункту 8.1  
+После этого можно сразу перейти к пункту [8.1](https://github.com/itechnocrat/docker_laravel-app_skeleton#step-81---start-laravel_app)  
 ### Step 2 — Creating the Docker Compose File
 ```sh
 vi ./laravel-app/docker-compose.yml
