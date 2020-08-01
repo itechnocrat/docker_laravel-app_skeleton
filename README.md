@@ -1,12 +1,12 @@
 Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)  
 Чтобы меньше создавать каталоги и файлы конфигурции вручную, такие, как том db_data для СУБД, Dockerfile, docker-compose.yml, .env, оформил их в репозиторий.  
 Клонировать репозиторий:  
-`git clone https://github.com/technocrat/docker_laravel-app_skeleton.git laravel-app`  
+`git clone https://github.com/itechnocrat/docker_laravel-app_skeleton.git laravel-app`  
 выполнить:
 ```sh
 rm -rf laravel-app/.git
 ```
-Далее по пунктам основного мануала, но когда дойдет до создания каталога db_data, конфигов mysql, nginx, php, .env, то их делать уже будет не нужно, так как они придут из https://github.com/technocrat/docker_laravel-app_skeleton.git.  
+Далее по пунктам основного мануала, но когда дойдет до создания каталога db_data, конфигов mysql, nginx, php, .env, то их делать уже будет не нужно, так как они придут из https://github.com/itechnocrat/docker_laravel-app_skeleton.git.  
 ### Step 1 — Downloading Laravel and Installing Dependencies
 ```sh
 git clone https://github.com/laravel/laravel.git laravel-app && \
