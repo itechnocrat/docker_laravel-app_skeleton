@@ -3,7 +3,11 @@
 PhpMyAdmin дступен на localhost:8080.  
 Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)  
 ### Step 0 - Intro
-Расположиться в каком-то каталоге, например, в projects.  
+Расположиться в каком-то каталоге, например, в projects. 
+Все сводится к двум шагам:  
+- 1. клонирование одного репозитория, удаления в нем каталога .git и  
+- 1.1 копирования поверх уже существующего репозитория, другого, тоже с удалением .git, т.е. надо просто слить вместе две структуры каталогов.  
+Остальные шаги, начиная со 2, это просто конспект, того, как сделать все с нуля, вручную.
 ### Step 1 — Downloading Laravel and Installing Dependencies
 ```sh
 git clone https://github.com/laravel/laravel.git laravel-app
