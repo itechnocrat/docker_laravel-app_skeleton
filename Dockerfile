@@ -21,14 +21,16 @@ RUN apt-get update && \
     unzip \
     git \
     curl \
-    libonig-dev
+    libonig-dev \
+    libbz2-dev \
+    libzip-dev
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
-RUN docker-php-ext-install bcmath bz2 calendar exif iconv intl gd ldap mbstring memcached mysqli pdo_mysql pdo_pgsql pgsql redis soap xsl zip sockets pcntl opcache
-# RUN mbstring
+# RUN docker-php-ext-install bcmath bz2 calendar exif iconv intl gd ldap mbstring memcached mysqli pdo_mysql pdo_pgsql pgsql redis soap xsl zip sockets pcntl opcache
+RUN docker-php-ext-install pdo_mysql mysqli zip exif pcntl
 RUN docker-php-source delete
 # RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
