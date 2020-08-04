@@ -1,33 +1,44 @@
 # Рабочий, пустой Laravel в Docker-контейнерах, с базой данных и PhpMyAdmin
+
 После запуска приложение доступно на localhost.  
 PhpMyAdmin дступен на localhost:8080.  
-Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)  
+Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)
+
 ### Step 0 - Intro
+
 Расположиться в каком-то каталоге, например, в projects.  
-Далее все сводится к двум шагам:  
-- 1 клонирование одного репозитория и удаления в нем каталога .git, и  
-- 1.1 копирования поверх, созаднного на шаге 1 репозитория, другого и тоже с удалением .git.  
-Т.е. надо просто слить вместе две структуры каталогов.  
-Остальные шаги, начиная со 2, это просто конспект, того, как сделать все с нуля, вручную.
+Далее есть два варианта:  
+1. Пропустить пункт 1.1 и проделать все настройки вручную, самостоятельно;
+2. Не пропускать пункт 1.1 и тем самым скопировать уже готовые настройки из [моего репозитория](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) в структуру, развернутого на шаге 1, репозитория [Laravel](https://github.com/laravel/laravel.git).
+
 ### Step 1 — Downloading Laravel and Installing Dependencies
+
 ```sh
-git clone https://github.com/laravel/laravel.git laravel-app
-cd laravel-app
-rm -rf .git
-docker run --rm -v $(pwd):/app composer install
+git clone https://github.com/laravel/laravel.git laravel-app && \
+cd laravel-app && \
+rm -rf .git && \
+docker run --rm -v $(pwd):/app composer install && \
 cd ..
+
 ```
+
 ### Step 1.1 - Добавление конфигурационных файлов и тома для данных базы данных
-Этот репозитормй нужно загрузить, как [архив](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) и его СОДЕРЖИМОЕ скопировать в `laravel-app`, затем:
+
+Этот репозитормй нужно загрузить, как [архив](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) и его СОДЕРЖИМОЕ скопировать в уже существующий каталог `laravel-app`, затем:
+
 ```sh
-rm -rf ./laravel-app/.git
-sudo chown -R $USER:$USER ./laravel-app
+rm -rf ./laravel-app/.git && \
+sudo chown -R $USER:$USER ./laravel-app && \
 ```
-После этого можно сразу перейти к пункту [8.1](https://github.com/itechnocrat/docker_laravel-app_skeleton#step-81---start-laravel_app)  
+
+После этого можно сразу перейти к пункту [8.1](https://github.com/itechnocrat/docker_laravel-app_skeleton#step-81---start-laravel_app)
+
 ### Step 2 — Creating the Docker Compose File
+
 ```sh
 vi ./laravel-app/docker-compose.yml
 ```
+
 ```
 version: "3"
 services:
@@ -108,12 +119,15 @@ networks:
     driver: bridge
 
 ```
+
 ### Step 3 — Persisting Data
 
 ### Step 4 — Creating the Dockerfile
+
 ```sh
 vi ./laravel-app/Dockerfile
 ```
+
 ```
 FROM php:7.4-fpm
 
@@ -185,20 +199,26 @@ EXPOSE 9000
 CMD ["php-fpm"]
 
 ```
+
 ### Step 5 — Configuring PHP
+
 ```sh
 mkdir ./laravel-app/php
 vi ./laravel-app/php/local.ini
 ```
+
 ```
 upload_max_filesize=40M
 post_max_size=40M
 ```
+
 ### Step 6 — Configuring Nginx
+
 ```sh
 mkdir -p ./laravel-app/nginx/conf.d
 vi ./laravel-app/nginx/conf.d/app.conf
 ```
+
 ```
 server {
     listen 80;
@@ -221,13 +241,16 @@ server {
     }
 }
 ```
+
 ### Step 7 — Configuring MySQL
+
 ```sh
 mkdir ./laravel-app/mysql && \
 mkdir ./laravel-app/dbdata && \
 vi ./laravel-app/mysql/my.cnf
 
 ```
+
 ```
 [mysqld]
 character-set-server = utf8
@@ -237,11 +260,14 @@ general_log_file = /var/lib/mysql/general.log
 [client]
 default-character-set = utf8
 ```
+
 ### Step 8 — Modifying Environment Settings and Running the Containers
+
 ```sh
 cp ./laravel-app/.env.example ./laravel-app/.env
 vi ./laravel-app/.env
 ```
+
 ```
 DB_CONNECTION=mysql
 DB_HOST=db
@@ -250,7 +276,9 @@ DB_DATABASE=laravel
 DB_USERNAME=laraveluser
 DB_PASSWORD=laraveluser_password
 ```
+
 ### Step 8.1 - Start laravel_app
+
 ```sh
 cd laravel-app
 docker-compose up -d
@@ -258,41 +286,56 @@ docker ps
 docker-compose exec app php artisan key:generate
 docker-compose exec app php artisan config:cache
 ```
+
 [Open in browser](http://http://localhost/)
+
 ### Step 9 — Creating a User for MySQL
+
 ```sh
 docker-compose exec db bash
 mysql -u root -pr00t
 # пароль r00t
 ```
+
 ```sql
 show databases;
 GRANT ALL ON laravel.* TO 'laraveluser'@'%' IDENTIFIED BY 'laraveluser_password';
 FLUSH PRIVILEGES;
 EXIT;
 ```
+
 Так хотелось бы, но похоже, что не работает:
+
 ```sql
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON laravel.* TO 'laraveluser'@'%' IDENTIFIED BY 'laraveluser_password';
 ```
+
 ```sh
 exit
 ```
+
 ### Step 10 — Migrating Data and Working with the Tinker Console
+
 With your application running, you can migrate your data and experiment with the tinker command, which will initiate a PsySH console with Laravel preloaded. PsySH is a runtime developer console and interactive debugger for PHP, and Tinker is a REPL specifically for Laravel. Using the tinker command will allow you to interact with your Laravel application from the command line in an interactive shell.
 
 First, test the connection to MySQL by running the Laravel artisan migrate command, which creates a migrations table in the database from inside the container:
+
 ```sh
 docker-compose exec app php artisan migrate
 docker-compose exec app php artisan tinker
 ```
+
 `>>> \DB::table('migrations')->get();`  
 `exit`
+
 ### Conclusion
+
 ...
+
 ### Дополнительные материалы
+
 [Настройка Laravel, Nginx и MySQL с Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose-ru)  
 [Сборка PHP 7.4 docker образа](http://dimonz.ru/post/create-php-7-4-docker-image)
 [Wordpress & Docker](https://gist.github.com/bradtraversy/faa8de544c62eef3f31de406982f1d42)  
 [MariaDB + Phpmyadmin + Docker: Running Local Database](https://hackernoon.com/mariadb-phpmyadmin-docker-running-local-database-ok9q36ji)  
-[Set up a MySQL Server and phpMyAdmin with Docker](https://linuxhint.com/mysql_server_docker/)  
+[Set up a MySQL Server and phpMyAdmin with Docker](https://linuxhint.com/mysql_server_docker/)
