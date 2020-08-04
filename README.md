@@ -7,11 +7,14 @@ PhpMyAdmin дступен на localhost:8080.
 ### Step 0 - Intro
 
 Расположиться в каком-то каталоге, например, в test.  
-Далее есть два варианта:  
+Далее есть два варианта:
+
 1. Пропустить пункт 1.1 и проделать все настройки вручную, самостоятельно;
 2. Не пропускать пункт 1.1 и тем самым скопировать уже готовые настройки из [моего репозитория](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) в структуру, развернутого на шаге 1, репозитория [Laravel](https://github.com/laravel/laravel.git).
 
 ### Step 1 — Downloading Laravel and Installing Dependencies
+
+Копировать/вставить в консоль весь следующий абзац:
 
 ```sh
 git clone https://github.com/laravel/laravel.git laravel-app && \
@@ -19,16 +22,17 @@ cd laravel-app && \
 rm -rf .git && \
 docker run --rm -v $(pwd):/app composer install && \
 cd ..
-
+# эту строчку тоже копировать
 ```
 
 ### Step 1.1 - Добавление конфигурационных файлов и тома для данных базы данных
 
-Этот репозитормй нужно загрузить, как [архив](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) и его СОДЕРЖИМОЕ скопировать в уже существующий каталог `laravel-app`, затем:
+Репозиторй-сабж нужно загрузить, как [архив](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) и его СОДЕРЖИМОЕ скопировать в уже существующий каталог `laravel-app`, затем, копировать/вставить в консоль весь следующий абзац:
 
 ```sh
 rm -rf ./laravel-app/.git && \
-sudo chown -R $USER:$USER ./laravel-app && \
+sudo chown -R $USER:$USER ./laravel-app
+# эту строчку тоже копировать
 ```
 
 После этого можно сразу перейти к пункту [8.1](https://github.com/itechnocrat/docker_laravel-app_skeleton#step-81---start-laravel_app)
