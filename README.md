@@ -10,7 +10,7 @@ PhpMyAdmin дступен на localhost:8080.
 Далее есть два варианта:
 
 1. Пропустить пункт 1.1 и проделать все настройки вручную, самостоятельно;
-2. Не пропускать пункт 1.1 и тем самым скопировать уже готовые настройки из [моего репозитория](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) в структуру, развернутого на шаге 1, репозитория [Laravel](https://github.com/laravel/laravel.git).
+2. Не пропускать пункт 1.1 и тем самым скопировать уже готовые настройки из [моего репозитория](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) в структуру каталогов репозитория [Laravel](https://github.com/laravel/laravel.git), который будет клонирован на шаге 1.
 
 ### Step 1 — Downloading Laravel and Installing Dependencies
 
@@ -343,3 +343,8 @@ docker-compose exec app php artisan tinker
 [Wordpress & Docker](https://gist.github.com/bradtraversy/faa8de544c62eef3f31de406982f1d42)  
 [MariaDB + Phpmyadmin + Docker: Running Local Database](https://hackernoon.com/mariadb-phpmyadmin-docker-running-local-database-ok9q36ji)  
 [Set up a MySQL Server and phpMyAdmin with Docker](https://linuxhint.com/mysql_server_docker/)
+[Structuring the Docker setup for PHP Projects](https://www.pascallandau.com/blog/structuring-the-docker-setup-for-php-projects/)  
+[Docker for PHP: A Start-to-Finish Guide](https://stackify.com/docker-for-php-a-start-to-finish-guide/)  
+[General purpose PHP images for Docker](https://github.com/thecodingmachine/docker-images-php)  
+[Using Docker for PHP development](https://www.pixelite.co.nz/article/using-docker-for-local-php-development-2/)  
+[Setup a basic Local PHP Development Environment in Docker ](https://dev.to/truthseekers/setup-a-basic-local-php-development-environment-in-docker-kod)

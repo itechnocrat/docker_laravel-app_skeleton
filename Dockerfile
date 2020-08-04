@@ -11,33 +11,23 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
     build-essential \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     locales \
     zip \
-    jpegoptim \
-    optipng \
-    pngquant \
-    gifsicle \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
     unzip \
+    git \
     curl \
-    libonig-dev \
-    libzip-dev \
-    libmcrypt-dev \
-    zlib1g-dev \
-    libxml2-dev \
-    graphviz \
-    libcurl4-openssl-dev \
-    pkg-config \
-    libpq-dev
+    libonig-dev
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
-RUN docker-php-ext-install pdo_mysql mysqli intl zip exif pcntl opcache
+RUN docker-php-ext-install bcmath bz2 calendar exif iconv intl gd ldap mbstring memcached mysqli pdo_mysql pdo_pgsql pgsql redis soap xsl zip sockets pcntl opcache
 # RUN mbstring
 RUN docker-php-source delete
 # RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
