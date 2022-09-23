@@ -1,7 +1,7 @@
-FROM php:7.4-fpm
+FROM php:8.0.23-fpm
 
 # Copy composer.lock and composer.json
-COPY composer.lock composer.json /var/www/
+#COPY composer.lock composer.json /var/www/
 
 # Set working directory
 WORKDIR /var/www
@@ -17,7 +17,7 @@ RUN apt-get update && \
     locales \
     zip \
     jpegoptim optipng pngquant gifsicle \
-    vim \
+    vim-nox \
     unzip \
     git \
     curl \
@@ -43,8 +43,8 @@ RUN docker-php-source delete
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+#RUN groupadd -g 1000 www
+#RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy existing application directory contents
 COPY . /var/www
