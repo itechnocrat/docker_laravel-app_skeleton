@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: digitalocean.com/php
+    # image: digitalocean.com/php
     container_name: app
     restart: unless-stopped
     tty: true
@@ -21,7 +21,7 @@ services:
 
   #Nginx Service
   webserver:
-    image: nginx:alpine
+    image: nginx:latest
     container_name: webserver
     restart: unless-stopped
     tty: true
@@ -36,10 +36,9 @@ services:
 
   #MySQL Service
   db:
-    image: mysql:5.7.31
-    #image: mysql:5.7.22
+    image: mysql:latest
     #для mysql:8
-    #command: --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password
     container_name: db
     restart: unless-stopped
     tty: true
@@ -51,14 +50,14 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - ./db_data:/var/lib/mysql
+      # - ./db_data:/var/lib/mysql
       - ./mysql/my.cnf:/etc/mysql/my.cnf
     networks:
       - app-network
 
   # phpmyadmin
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin:latest
     container_name: phpmyadmin
     restart: unless-stopped
     ports:
@@ -66,6 +65,7 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: r00t
+      # PMA_ARBITRARY: 1
     depends_on:
       - db
     networks:
@@ -75,3 +75,8 @@ services:
 networks:
   app-network:
     driver: bridge
+
+#Volumes
+# volumes:
+#   dbdata:
+#     driver: local
