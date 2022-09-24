@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # image: digitalocean.com/php
+    image: digitalocean.com/php
     container_name: app
     restart: unless-stopped
     tty: true
@@ -15,9 +15,9 @@ services:
     working_dir: /var/www
     volumes:
       - ./:/var/www
-      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./os/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
-      - app-network
+      - network
 
   #Nginx Service
   webserver:
@@ -30,9 +30,9 @@ services:
       - "443:443"
     volumes:
       - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./os/nginx/conf.d/:/etc/nginx/conf.d/
     networks:
-      - app-network
+      - network
 
   #MySQL Service
   db:
@@ -50,10 +50,10 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      # - ./db_data:/var/lib/mysql
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      # - ./os/db:/var/lib/mysql
+      - ./os/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
-      - app-network
+      - network
 
   # phpmyadmin
   phpmyadmin:
@@ -69,14 +69,14 @@ services:
     depends_on:
       - db
     networks:
-      - app-network
+      - network
 
 #Docker Networks
 networks:
-  app-network:
+  network:
     driver: bridge
 
 #Volumes
 # volumes:
-#   dbdata:
+#   ./os/db:
 #     driver: local

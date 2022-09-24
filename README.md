@@ -1,306 +1,128 @@
-# Рабочий, пустой Laravel в Docker-контейнерах, с базой данных, томами и PhpMyAdmin
+# Docker Laravel-app skeleton
 
-После запуска приложение доступно на localhost.  
-PhpMyAdmin дступен на localhost:8080.  
+Рабочий, пустой Laravel в Docker-контейнерах, с базой данных, томами и PhpMyAdmin
+
 Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)
 
-### Step 0 - Intro
+После запуска контейнера приложение доступно на [localhost](http://localhost/)  
+PhpMyAdmin доступен на [localhost:8080](localhost:8080).  
 
-Расположиться в каком-то каталоге, например, в test.  
-Далее есть два варианта:
+## Intro
 
-1. Пропустить пункт 1.1 и проделать все настройки вручную, самостоятельно;
-2. Не пропускать пункт 1.1 и тем самым скопировать уже готовые настройки из [моего репозитория](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) в структуру каталогов репозитория [Laravel](https://github.com/laravel/laravel.git), который будет клонирован на шаге 1.
+Замысел в следующем:  
+В скелет [Laravel](https://github.com/laravel/laravel.git)-приложения интегрируется Docker-конфигурация, т.е. Laravel-приложение будет запускаться в контейнере и никому не будет мешать.  
 
-### Step 1 — Downloading Laravel and Installing Dependencies
+Создать каталог проекта, например, `project` и расположиться в нем.  
 
-Копировать/вставить в консоль весь следующий абзац:
+## Step 1 — Downloading Laravel and Installing Dependencies
+
+Клонировать [Laravel](https://github.com/laravel/laravel.git)-приложение:
+
+Копировать/вставить в консоль весь следующий абзац команд, с пустой строкой включительно и нажать Enter:
 
 ```sh
 git clone https://github.com/laravel/laravel.git laravel-app && \
-cd laravel-app && \
-rm -rf .git && \
-docker run --rm -v $(pwd):/app composer install && \
-cd ..
-# эту строчку тоже копировать
-```
-
-### Step 1.1 - Добавление конфигурационных файлов и тома для данных базы данных
-
-Не забываем, что надо все время находиться все в том же каталоге, например, test, над каталогом laravel-app.  
-Репозиторий-сабж нужно загрузить, как [архив](https://github.com/itechnocrat/docker_laravel-app_skeleton/archive/master.zip) и его СОДЕРЖИМОЕ скопировать в уже существующий каталог `laravel-app`, затем, копировать/вставить в консоль весь следующий абзац:
-
-```sh
 rm -rf ./laravel-app/.git && \
+rm -rf ./laravel-app/.github && \
+mv ./laravel-app/README.md ./laravel-app/README_laravel.md
+
+```
+
+```sh
+cd ./laravel-app
+docker run --rm -v $(pwd):/app composer install
+
+cd ..
+```
+
+Выхлоп команды:
+
+<pre>
+81 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+> @php artisan vendor:publish --tag=laravel-assets --ansi --force
+
+   INFO  No publishable resources for tag [laravel-assets].  
+</pre>
+
+В сеансе обычного пользователя выполнить:
+
+```sh
 sudo chown -R $USER:$USER ./laravel-app
-# эту строчку тоже копировать
+
 ```
 
-После этого можно сразу перейти к пункту [8.1](https://github.com/itechnocrat/docker_laravel-app_skeleton#step-81---start-laravel_app)
+## Step 1.1 - Добавление конфигурационных файлов Docker'а
 
-### Step 2 — Creating the Docker Compose File
+Оставаясь в том же каталоге `project`, клонировать репозиторий [docker_laravel-app_skeleton](https://github.com/itechnocrat/docker_laravel-app_skeleton):  
+
+Копировать/вставить в консоль весь следующий абзац команд, с пустой строкой включительно и нажать Enter:
 
 ```sh
-vi ./laravel-app/docker-compose.yml
-```
-
-```
-version: "3"
-services:
-  #PHP Service
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: digitalocean.com/php
-    container_name: app
-    restart: unless-stopped
-    tty: true
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
-    working_dir: /var/www
-    volumes:
-      - ./:/var/www
-      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    networks:
-      - app-network
-
-  #Nginx Service
-  webserver:
-    image: nginx:alpine
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-    networks:
-      - app-network
-
-  #MySQL Service
-  db:
-    image: mysql:5.7.31
-    #image: mysql:5.7.22
-    #для mysql:8
-    #command: --default-authentication-plugin=mysql_native_password
-    container_name: db
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: r00t
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    volumes:
-      - ./db_data:/var/lib/mysql
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
-    networks:
-      - app-network
-
-  # phpmyadmin
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    restart: unless-stopped
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: r00t
-    depends_on:
-      - db
-    networks:
-      - app-network
-
-#Docker Networks
-networks:
-  app-network:
-    driver: bridge
+git clone https://github.com/itechnocrat/docker_laravel-app_skeleton && \
+rm -rf ./docker_laravel-app_skeleton/.git
 
 ```
 
-### Step 3 — Persisting Data
+Скопировать содержимое второго репозитория в первый и удалить второй, он больше не нужен:  
 
-### Step 4 — Creating the Dockerfile
+Копировать/вставить в консоль весь следующий абзац команд, с пустой строкой включительно и нажать Enter:
 
 ```sh
-vi ./laravel-app/Dockerfile
-```
-
-```
-FROM php:7.4-fpm
-
-# Copy composer.lock and composer.json
-COPY composer.lock composer.json /var/www/
-
-# Set working directory
-WORKDIR /var/www
-
-# Install dependencies
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y --no-install-recommends \
-    build-essential \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libjpeg-dev \
-    locales \
-    zip \
-    jpegoptim \
-    optipng \
-    pngquant \
-    gifsicle \
-    unzip \
-    curl \
-    libonig-dev \
-    libzip-dev \
-    libmcrypt-dev \
-    zlib1g-dev \
-    libxml2-dev \
-    graphviz \
-    libcurl4-openssl-dev \
-    pkg-config \
-    libpq-dev
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install extensions
-RUN docker-php-ext-install pdo_mysql intl zip exif pcntl opcache
-# RUN mbstring
-RUN docker-php-source delete
-# RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install -j$(nproc) gd
-RUN docker-php-source delete
-# изменение UID пользователя `www-data`, (если нужно)
-# RUN usermod -u 33 www-data
-
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy existing application directory contents
-COPY . /var/www
-
-# Copy existing application directory permissions
-COPY --chown=www:www . /var/www
-
-# Change current user to www
-USER www
-
-# Expose port 9000 and start php-fpm server
-EXPOSE 9000
-CMD ["php-fpm"]
+cp -r ./docker_laravel-app_skeleton/* ./laravel-app/ && \
+cp -r ./docker_laravel-app_skeleton/.env ./laravel-app/ && \
+rm -rf ./docker_laravel-app_skeleton
 
 ```
 
-### Step 5 — Configuring PHP
+Отсюда возможно сразу перейти к шагу 8.1
+
+вырезано
+
+## Step 8.1 - Start laravel_app
 
 ```sh
-mkdir ./laravel-app/php
-vi ./laravel-app/php/local.ini
-```
-
-```
-upload_max_filesize=40M
-post_max_size=40M
-```
-
-### Step 6 — Configuring Nginx
-
-```sh
-mkdir -p ./laravel-app/nginx/conf.d
-vi ./laravel-app/nginx/conf.d/app.conf
-```
-
-```
-server {
-    listen 80;
-    index index.php index.html;
-    error_log  /var/log/nginx/error.log;
-    access_log /var/log/nginx/access.log;
-    root /var/www/public;
-    location ~ \.php$ {
-        try_files $uri =404;
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass app:9000;
-        fastcgi_index index.php;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param PATH_INFO $fastcgi_path_info;
-    }
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-        gzip_static on;
-    }
-}
-```
-
-### Step 7 — Configuring MySQL
-
-```sh
-mkdir ./laravel-app/mysql && \
-mkdir ./laravel-app/dbdata && \
-vi ./laravel-app/mysql/my.cnf
-
-```
-
-```
-[mysqld]
-character-set-server = utf8
-collation-server = utf8_general_ci
-general_log = 1
-general_log_file = /var/lib/mysql/general.log
-[client]
-default-character-set = utf8
-```
-
-### Step 8 — Modifying Environment Settings and Running the Containers
-
-```sh
-cp ./laravel-app/.env.example ./laravel-app/.env
-vi ./laravel-app/.env
-```
-
-```
-DB_CONNECTION=mysql
-DB_HOST=db
-DB_PORT=3306
-DB_DATABASE=laravel
-DB_USERNAME=laraveluser
-DB_PASSWORD=laraveluser_password
-```
-
-### Step 8.1 - Start laravel_app
-
-```sh
-cd laravel-app
+cd ./laravel-app
 docker-compose up -d
-docker ps
-docker-compose exec app php artisan key:generate
+docker ps # просто посмотреть выполняемые контейнеры
+# скопировать следующие 3 строки, вместе с пустой и нажать Enter
+docker-compose exec app php artisan key:generate && \
 docker-compose exec app php artisan config:cache
+
 ```
 
-[Open in browser](http://http://localhost/)
+Контейнер и Laravel-приложение готовы и работают.  
 
-### Step 9 — Creating a User for MySQL
+Web-server и модуль php обрабатывают каталог `public`, остальные каталоги обеспечивают работу этого каталога.
+
+Теперь надо подготовить базу данных:
+
+## Step 9 — Creating a User for MySQL
 
 ```sh
 docker-compose exec db bash
 mysql -u root -pr00t
 # пароль r00t
 ```
+
+Для MySQL 8:  
+Сначала явно создать юзера командой:
+
+```sql
+CREATE USER 'laraveluser'@'%' IDENTIFIED BY 'laraveluser_password';
+```
+
+Затем давать ему права:
+
+```sql
+GRANT ALL ON laravel.* TO 'laraveluser'@'%';
+```
+
+```sh
+exit
+```
+
+До 8-ой версии
 
 ```sql
 show databases;
@@ -309,21 +131,47 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
-Так хотелось бы, но похоже, что не работает:
+## 10 - Использование
 
-```sql
-GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES ON laravel.* TO 'laraveluser'@'%' IDENTIFIED BY 'laraveluser_password';
-```
+Теперь возможно переходить по ссылкам:
+
+[localhost](http://localhost/)  
+[localhost/phpinfo.php](http://localhost/phpinfo.php)  
+[PhpMyAdmin](http://localhost:8080/)
+
+После открытия страницы PMA, смотреть на сообщение внизу.  
+Follow the warning’s link to “Create a database” to complete the installation.  
+Your user account will need permission to create new databases on the server.
+
+На этом всё.
+
+После изменений в конфиг-файлах перезапускать сборку следующим образом:
 
 ```sh
-exit
+docker-compose up -d --build
 ```
 
-### Step 10 — Migrating Data and Working with the Tinker Console
+Для очищения всего, что есть под управлением Docker:
+
+Копировать/вставить в консоль весь следующий абзац команд, с пустой строкой включительно и нажать Enter:
+
+```sh
+docker system prune && \
+docker system prune -a --volumes && \
+docker image prune && \
+docker container prune && \
+docker volume prune && \
+docker network prune
+
+```
+
+Внимание, будет удалено всё: все образы, контейнеры, сети.
+
+## Step 11 — Migrating Data and Working with the Tinker Console
 
 With your application running, you can migrate your data and experiment with the tinker command, which will initiate a PsySH console with Laravel preloaded. PsySH is a runtime developer console and interactive debugger for PHP, and Tinker is a REPL specifically for Laravel. Using the tinker command will allow you to interact with your Laravel application from the command line in an interactive shell.
 
-First, test the connection to MySQL by running the Laravel artisan migrate command, which creates a migrations table in the database from inside the container:
+First, `project` the connection to MySQL by running the Laravel artisan migrate command, which creates a migrations table in the database from inside the container:
 
 ```sh
 docker-compose exec app php artisan migrate
@@ -333,12 +181,13 @@ docker-compose exec app php artisan tinker
 `>>> \DB::table('migrations')->get();`  
 `exit`
 
-### Conclusion
+## Conclusion
 
 ...
 
-### Дополнительные материалы
+## Дополнительные материалы
 
+[How to Run PHPMyAdmin in a Docker Container](https://www.howtogeek.com/devops/how-to-run-phpmyadmin-in-a-docker-container/)  
 [Настройка Laravel, Nginx и MySQL с Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose-ru)  
 [Сборка PHP 7.4 docker образа](http://dimonz.ru/post/create-php-7-4-docker-image)
 [Wordpress & Docker](https://gist.github.com/bradtraversy/faa8de544c62eef3f31de406982f1d42)  
@@ -348,4 +197,4 @@ docker-compose exec app php artisan tinker
 [Docker for PHP: A Start-to-Finish Guide](https://stackify.com/docker-for-php-a-start-to-finish-guide/)  
 [General purpose PHP images for Docker](https://github.com/thecodingmachine/docker-images-php)  
 [Using Docker for PHP development](https://www.pixelite.co.nz/article/using-docker-for-local-php-development-2/)  
-[Setup a basic Local PHP Development Environment in Docker ](https://dev.to/truthseekers/setup-a-basic-local-php-development-environment-in-docker-kod)
+[Setup a basic Local PHP Development Environment in Docker](https://dev.to/truthseekers/setup-a-basic-local-php-development-environment-in-docker-kod)
