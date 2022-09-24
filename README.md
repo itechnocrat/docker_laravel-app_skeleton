@@ -5,7 +5,8 @@
 Основано на [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)
 
 После запуска контейнера приложение доступно на [localhost](http://localhost/)  
-PhpMyAdmin доступен на [localhost:8080](localhost:8080).  
+Информация о PHP [localhost/phpinfo.php](http://localhost/phpinfo.php)  
+PhpMyAdmin доступен на [http://localhost:8080/](http://localhost:8080/)
 
 ## Intro
 
